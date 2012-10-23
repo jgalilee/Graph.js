@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Graph.js by jgalilee</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Graph.js</h1>
+          <h2>Very simple graph object.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/jgalilee/Graph.js/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/jgalilee/Graph.js/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/jgalilee/Graph.js" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>Graph.js</h1>
+
+<p>Very simple graph object. It provides some basic but powerful methods for simply connecting a set of nodes into a graph that you can then do whatever you want to.</p>
+
+<h2>Node(graph, index)</h2>
+
+<h3>.connect(alias, node)</h3>
+
+<p>Creates a named unidirectional edge between the node and the specified node.</p>
+
+<h3>.get(alias)</h3>
+
+<p>Returns the node at the end of the named unidirectional edge.</p>
+
+<h2>Graph(n, connector)</h2>
+
+<p>Constructs a graph of with n nodes. It then runs the connector through the map function if the connector is defined.</p>
+
+<p>Every node is assigned the index of it's position in the node array 0 .. n.</p>
+
+<h3>.get(index)</h3>
+
+<p>Returns the node with the provided index (assumes index is in the range of 0 .. n).</p>
+
+<h3>.alias(group, alias, node?)</h3>
+
+<p>If the optional node is provided it first assigns the node, to the group under the specified alias, before continuing.</p>
+
+<p>Returns the node at the group, alias.</p>
+
+<h3>.map(procedure)</h3>
+
+<p>Runs the provided procedure function on each node. The procedure is passed the current graph and the node it is being run on.</p>
+
+<h3>.connect(node, offsets)</h3>
+
+<p>Treats the 1D node array as a 2D array. Connects the node to each node found at the X, Y offset from the specified nodes X, Y. Names the connection as specified by the key from the offset definition.</p>
+
+<p>Returns the graph.</p>
+
+<p><strong>Example (Grid 2x2)</strong></p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Grid</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Graph</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">graph</span><span class="p">,</span> <span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">graph</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="p">{</span>
+    <span class="s2">"UP"</span><span class="o">:</span>    <span class="p">{</span> <span class="nx">y</span><span class="o">:-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span>
+    <span class="s2">"DOWN"</span><span class="o">:</span>  <span class="p">{</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span>
+    <span class="s2">"LEFT"</span><span class="o">:</span>  <span class="p">{</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">x</span><span class="o">:-</span><span class="mi">1</span> <span class="p">},</span>
+    <span class="s2">"RIGHT"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">1</span> <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Every node in the above example will have an UP, DOWN, LEFT, RIGHT edge. If a node existed at that offset.</p>
+
+<h2>Examples</h2>
+
+<h3>Eight-Directional Grid and the alias function</h3>
+
+<p>This is a slightly more complex example, here I not only create a grid where each cell knows about it's neighbours, but I also alias each node using it's row, col as an alias.</p>
+
+<p>I can now use the alias function to index by <em>row, col</em> ...</p>
+
+<div class="highlight"><pre><span class="nx">Grid</span><span class="p">.</span><span class="nx">alias</span><span class="p">(</span><span class="s2">"TABLE"</span><span class="p">,</span> <span class="s2">"0, 0"</span><span class="p">);</span> <span class="c1">// equivalent Grid.get(0);</span>
+<span class="nx">Grid</span><span class="p">.</span><span class="nx">alias</span><span class="p">(</span><span class="s2">"TABLE"</span><span class="p">,</span> <span class="s2">"2, 2"</span><span class="p">);</span> <span class="c1">// equivalent Grid.get(8);</span>
+</pre></div>
+
+<p>The definition of the graph.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Grid</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Graph</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">graph</span><span class="p">,</span> <span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">index</span> <span class="o">%</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">graph</span><span class="p">.</span><span class="nx">size</span><span class="p">));</span>
+  <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">index</span> <span class="o">/</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">graph</span><span class="p">.</span><span class="nx">size</span><span class="p">));</span>
+  <span class="kd">var</span> <span class="nx">alias</span> <span class="o">=</span> <span class="nx">x</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">y</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+  <span class="nx">graph</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">graph</span><span class="p">.</span><span class="nx">alias</span><span class="p">(</span><span class="s2">"TABLE"</span><span class="p">,</span> <span class="nx">alias</span><span class="p">,</span> <span class="nx">node</span><span class="p">),</span> <span class="p">{</span>
+    <span class="s2">"NORTH"</span><span class="o">:</span>      <span class="p">{</span> <span class="nx">y</span><span class="o">:-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span>
+    <span class="s2">"NORTH-EAST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">y</span><span class="o">:-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
+    <span class="s2">"EAST"</span><span class="o">:</span>       <span class="p">{</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
+    <span class="s2">"SOUTH-EAST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
+    <span class="s2">"SOUTH"</span><span class="o">:</span>      <span class="p">{</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span>
+    <span class="s2">"SOUTH-WEST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="o">:-</span><span class="mi">1</span> <span class="p">},</span>
+    <span class="s2">"WEST"</span><span class="o">:</span>       <span class="p">{</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">x</span><span class="o">:-</span><span class="mi">1</span> <span class="p">},</span>
+    <span class="s2">"NORTH-WEST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">y</span><span class="o">:-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">x</span><span class="o">:-</span><span class="mi">1</span> <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>Hexagonal Grid</h3>
+
+<p>Even though the last two examples have focused on creating traditional grids, this is not the limit. You can create whatever kind of graph you want. Here I have created a Hexagonal grid.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">HexagonalGrid</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Graph</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">graph</span><span class="p">,</span> <span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">index</span> <span class="o">/</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">graph</span><span class="p">.</span><span class="nx">size</span><span class="p">))</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">graph</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="p">{</span>
+      <span class="s2">"HEX-EAST"</span><span class="o">:</span>       <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span>
+      <span class="s2">"HEX-SOUTH-EAST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
+      <span class="s2">"HEX-SOUTH-WEST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
+      <span class="s2">"HEX-WEST"</span><span class="o">:</span>       <span class="p">{</span> <span class="nx">x</span><span class="o">:-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span>
+      <span class="s2">"HEX-NORTH-WEST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:-</span><span class="mi">1</span> <span class="p">},</span>
+      <span class="s2">"HEX-NORTH-EAST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:-</span><span class="mi">1</span> <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">graph</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="p">{</span>
+      <span class="s2">"HEX-EAST"</span><span class="o">:</span>       <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span>
+      <span class="s2">"HEX-SOUTH-EAST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
+      <span class="s2">"HEX-SOUTH-WEST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
+      <span class="s2">"HEX-WEST"</span><span class="o">:</span>       <span class="p">{</span> <span class="nx">x</span><span class="o">:-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span>
+      <span class="s2">"HEX-NORTH-WEST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:-</span><span class="mi">1</span> <span class="p">},</span>
+      <span class="s2">"HEX-NORTH-EAST"</span><span class="o">:</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:-</span><span class="mi">1</span> <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">graph</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>Licence</h2>
+
+<p>Copyright 2012 Jack Galilee</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+        </section>
+
+        <footer>
+          Graph.js is maintained by <a href="https://github.com/jgalilee">jgalilee</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
