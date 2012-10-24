@@ -22,7 +22,7 @@ Graph.prototype.map = function(procedure) {
   return _this;
 }
 
-Graph.prototype.plot = function(node, directions) {
+Graph.prototype.connect = function(node, directions) {
   var _this = this;
   var width = Math.sqrt(_this.size);
   for(var key in directions) {
