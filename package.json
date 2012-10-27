@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "name": "Graph.js",
+  "dependencies": {
+    "jake-uglify": ">= 1.0.1"
+  }
+}
